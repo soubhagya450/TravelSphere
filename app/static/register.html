@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - TravelSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+
+  <div class="card" style="max-width:480px;width:100%;padding:2.5rem 2rem;margin:1.5rem;">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <a href="/index.html" class="logo" style="justify-content:center;margin-bottom:0.75rem;">
+        <div class="logo-icon">✈️</div>
+        <span>Travel<strong style="color:var(--accent-blue);">Sphere</strong></span>
+      </a>
+      <h2 style="font-size:1.6rem;font-weight:700;color:#fff;">Join TravelSphere</h2>
+      <p style="font-size:0.85rem;color:var(--text-secondary);">Start your journey with live tracking and curated hotel stays</p>
+    </div>
+
+    <form id="registerForm">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" id="name" class="form-control" placeholder="e.g. Soubhagya Patel" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" id="email" class="form-control" placeholder="e.g. soubhagya@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password (min 8 chars, 1 number/letter)</label>
+        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Phone Number (optional)</label>
+        <input type="tel" id="phone" class="form-control" placeholder="+91 9876543210">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Account Role</label>
+        <select id="role" class="form-control">
+          <option value="user">Traveler (Book hotels & track trips)</option>
+          <option value="admin">Admin (Manage hotels & supervise)</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:1.5rem;">
+        Create Account →
+      </button>
+    </form>
+
+    <div style="text-align:center;margin-top:1.5rem;font-size:0.88rem;color:var(--text-secondary);">
+      Already registered? <a href="/login.html" style="color:var(--accent-blue);text-decoration:none;font-weight:600;">Sign in</a>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - TravelSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+
+  <div class="card" style="max-width:440px;width:100%;padding:2.5rem 2rem;margin:1.5rem;">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <a href="/index.html" class="logo" style="justify-content:center;margin-bottom:0.75rem;">
+        <div class="logo-icon">✈️</div>
+        <span>Travel<strong style="color:var(--accent-blue);">Sphere</strong></span>
+      </a>
+      <h2 style="font-size:1.6rem;font-weight:700;color:#fff;">Welcome Back</h2>
+      <p style="font-size:0.85rem;color:var(--text-secondary);">Log in to track routes and manage reservations</p>
+    </div>
+
+    <!-- Pre-filled demo hints -->
+    <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:var(--radius-md);padding:0.75rem 1rem;font-size:0.8rem;margin-bottom:1.5rem;color:#93c5fd;">
+      <div><strong>Demo Accounts:</strong></div>
+      <div>Traveler: <code>user@travel.com</code> / <code>User@1234</code></div>
+      <div>Admin: <code>admin@travel.com</code> / <code>Admin@1234</code></div>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" id="email" class="form-control" placeholder="user@travel.com" required value="user@travel.com">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="••••••••" required value="User@1234">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:1.5rem;">
+        Sign In →
+      </button>
+    </form>
+
+    <div style="text-align:center;margin-top:1.5rem;font-size:0.88rem;color:var(--text-secondary);">
+      Don't have an account? <a href="/register.html" style="color:var(--accent-blue);text-decoration:none;font-weight:600;">Sign up</a>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

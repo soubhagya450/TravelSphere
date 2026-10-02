@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Details - TravelSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/chatbot.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="logo">
+        <div class="logo-icon">✈️</div>
+        <span>Travel<strong style="color:var(--accent-blue);">Sphere</strong></span>
+      </a>
+
+      <button class="mobile-toggle-btn" id="mobileNavToggle" aria-label="Toggle Navigation">☰</button>
+
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="/index.html" class="nav-link">Home</a></li>
+          <li><a href="/dashboard.html" class="nav-link">Live Map & Tracker</a></li>
+          <li><a href="/hotels.html" class="nav-link">Explore Hotels</a></li>
+        </ul>
+
+        <div class="nav-auth" id="navAuthContainer"></div>
+      </div>
+    </div>
+  </nav>
+
+
+  <main class="container" id="hotelDetailContainer">
+    <!-- Breadcrumbs / Back button -->
+    <div style="margin-bottom:1.5rem;">
+      <a href="/hotels.html" style="color:var(--text-secondary);text-decoration:none;font-size:0.9rem;">
+        ← Back to Hotel Catalog
+      </a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.8fr 1.2fr;gap:2rem;align-items:start;">
+      <!-- Left Column: Hotel Info & Visuals -->
+      <div>
+        <div style="height:380px;border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1.5rem;box-shadow:var(--shadow-md);border:1px solid var(--border-color);">
+          <img id="hotelHeroImg" src="" alt="Hotel" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:0.75rem;">
+          <div>
+            <h1 id="hotelName" style="font-size:2.2rem;font-weight:800;color:#fff;">Loading Hotel...</h1>
+            <p id="hotelAddress" style="color:var(--text-secondary);font-size:1rem;margin-top:0.3rem;">📍 ...</p>
+          </div>
+          <div id="hotelRating" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3);padding:0.4rem 0.8rem;border-radius:var(--radius-full);font-weight:700;font-size:1.05rem;">
+            ★ 4.8
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border-color);margin:1.5rem 0;">
+
+        <!-- Description -->
+        <div style="margin-bottom:2rem;">
+          <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:0.75rem;">Overview & Experience</h3>
+          <p id="hotelDescription" style="color:var(--text-secondary);line-height:1.7;font-size:0.95rem;">
+            ...
+          </p>
+        </div>
+
+        <!-- Amenities -->
+        <div>
+          <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:1rem;">Property Amenities & Privileges</h3>
+          <div id="hotelAmenitiesList" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:0.75rem;">
+            <!-- Injected by booking.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Booking Reservation Card -->
+      <aside class="card" style="position:sticky;top:100px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color);">
+          <div>
+            <span id="hotelPricePerNight" style="font-size:1.9rem;font-weight:800;color:#fff;">₹0</span>
+            <span style="font-size:0.85rem;color:var(--text-muted);">/ night</span>
+          </div>
+          <span style="font-size:0.8rem;color:var(--accent-cyan);">Best Price Guaranteed</span>
+        </div>
+
+        <form id="bookingForm">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Check-In Date</label>
+              <input type="date" id="bookCheckIn" class="form-control" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Check-Out Date</label>
+              <input type="date" id="bookCheckOut" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Number of Rooms</label>
+            <select id="bookRooms" class="form-control">
+              <option value="1">1 Room (up to 2 Guests)</option>
+              <option value="2">2 Rooms (up to 4 Guests)</option>
+              <option value="3">3 Rooms (up to 6 Guests)</option>
+              <option value="4">4 Rooms (up to 8 Guests)</option>
+            </select>
+          </div>
+
+          <!-- Availability Status Check -->
+          <div id="availabilityBadge" style="margin-bottom:1.2rem;font-size:0.85rem;font-weight:600;">
+            <!-- Real-time availability text injected here -->
+          </div>
+
+          <!-- Guest Contact Info -->
+          <div style="margin-bottom:1.2rem;background:rgba(255,255,255,0.02);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--border-color);">
+            <strong style="font-size:0.88rem;display:block;margin-bottom:0.6rem;">Guest Contact Details</strong>
+            <div class="form-group" style="margin-bottom:0.6rem;">
+              <input type="text" id="guestName" class="form-control" placeholder="Full Name" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0.6rem;">
+              <input type="email" id="guestEmail" class="form-control" placeholder="Email Address" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <input type="tel" id="guestPhone" class="form-control" placeholder="Phone Number" required>
+            </div>
+          </div>
+
+          <!-- Price Calculation Breakdown -->
+          <div style="background:rgba(15,23,42,0.8);border-radius:var(--radius-md);padding:1rem;border:1px solid var(--border-color);margin-bottom:1.25rem;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;font-size:0.88rem;color:var(--text-secondary);">
+              <span>Stay Duration</span>
+              <span id="summaryNights">1 night</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;font-size:0.88rem;color:var(--text-secondary);">
+              <span>Selected Rooms</span>
+              <span id="summaryRooms">1 room</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;font-size:0.88rem;color:var(--text-secondary);">
+              <span>Room Subtotal</span>
+              <span id="summaryBasePrice">₹0</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:0.6rem;font-size:0.88rem;color:var(--text-secondary);">
+              <span>Taxes & GST (12%)</span>
+              <span id="summaryTaxes">Included</span>
+            </div>
+            <hr style="border:none;border-top:1px solid var(--border-color);margin:0.6rem 0;">
+            <div style="display:flex;justify-content:space-between;font-size:1.15rem;font-weight:700;color:#fff;">
+              <span>Estimated Total</span>
+              <span id="summaryTotal" style="color:var(--accent-cyan);">₹0</span>
+            </div>
+          </div>
+
+          <button type="submit" id="bookSubmitBtn" class="btn btn-primary btn-block btn-lg">
+            Confirm Booking & Pay →
+          </button>
+        </form>
+      </aside>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/booking.js"></script>
+  <script src="/js/chatbot.js"></script>
+</body>
+</html>

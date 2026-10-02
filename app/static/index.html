@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TravelSphere - Real-Time Travel & Luxury Hotel Booking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/chatbot.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="logo">
+        <div class="logo-icon">✈️</div>
+        <span>Travel<strong style="color:var(--accent-blue);">Sphere</strong></span>
+      </a>
+
+      <button class="mobile-toggle-btn" id="mobileNavToggle" aria-label="Toggle Navigation">☰</button>
+
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="/index.html" class="nav-link active">Home</a></li>
+          <li><a href="/dashboard.html" class="nav-link">Live Map & Tracker</a></li>
+          <li><a href="/hotels.html" class="nav-link">Explore Hotels</a></li>
+        </ul>
+
+        <div class="nav-auth" id="navAuthContainer">
+          <!-- Injected dynamically by auth.js -->
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span>📍 Next-Gen GPS Tracking & Luxury Stays</span>
+      </div>
+      <h1 class="hero-title">
+        Real-Time Travel Tracking & <span class="gradient-text">Curated Hotels</span>
+      </h1>
+      <p class="hero-subtitle">
+        Enter your origin and destination to track your live journey on interactive maps. Discover premium handpicked hotels, check real-time room availability, and navigate directly to your booked stay.
+      </p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="/dashboard.html" class="btn btn-primary btn-lg">
+          Launch Live GPS Tracker →
+        </a>
+        <a href="/hotels.html" class="btn btn-secondary btn-lg">
+          Browse Handpicked Hotels
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Destination Search Widget -->
+  <div class="container" style="margin-top: -2.5rem; position: relative; z-index: 10;">
+    <div class="card" style="border: 1px solid rgba(255,255,255,0.15); box-shadow: var(--shadow-lg);">
+      <form action="/dashboard.html" method="GET" style="display:grid;grid-template-columns:1fr 1fr auto;gap:1rem;align-items:end;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Trip Origin</label>
+          <input type="text" name="origin" class="form-control" placeholder="e.g. Mumbai, Maharashtra (or use live GPS)" required>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Destination</label>
+          <input type="text" name="dest" class="form-control" placeholder="e.g. Goa, Delhi, Bengaluru" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="height: 44px;">
+          Map Route & Find Stays 🚀
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Highlights & Key Features -->
+  <div class="container" style="padding-top: 4rem;">
+    <div style="text-align:center;margin-bottom:3rem;">
+      <h2 style="font-size:2.2rem;font-weight:700;margin-bottom:0.5rem;">Engineered for Seamless Journeys</h2>
+      <p style="color:var(--text-secondary);">Everything you need from departure to arrival in one unified platform.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1.5rem;">
+      <div class="card card-hover">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🛰️</div>
+        <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:0.5rem;">Live Route Tracking</h3>
+        <p style="color:var(--text-secondary);font-size:0.92rem;">
+          Continuous browser GPS tracking via <code>watchPosition</code>. Dynamic distance and ETA estimation powered by OpenStreetMap and OSRM routing.
+        </p>
+      </div>
+
+      <div class="card card-hover">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🏨</div>
+        <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:0.5rem;">Smart Destination Hotels</h3>
+        <p style="color:var(--text-secondary);font-size:0.92rem;">
+          Browse 5-star palatial resorts, beach retreats, and boutique hotels near your destination with real-time room availability validation.
+        </p>
+      </div>
+
+      <div class="card card-hover">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🔄</div>
+        <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:0.5rem;">Post-Booking Dynamic Route</h3>
+        <p style="color:var(--text-secondary);font-size:0.92rem;">
+          Once confirmed, your route automatically shifts from a generic city point directly to your booked hotel's exact coordinates.
+        </p>
+      </div>
+
+      <div class="card card-hover">
+        <div style="font-size:2.5rem;margin-bottom:1rem;">🛡️</div>
+        <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:0.5rem;">Secure Verified Checkout</h3>
+        <p style="color:var(--text-secondary);font-size:0.92rem;">
+          Razorpay/Stripe tokenized payment flow with server-side price calculation and HMAC-SHA256 signature verification.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Hotels Showcase -->
+  <div class="container" style="padding-top: 4rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+      <div>
+        <h2 style="font-size:2rem;font-weight:700;">Top Trending Luxury Stays</h2>
+        <p style="color:var(--text-secondary);font-size:0.92rem;">Handpicked accommodations with premium amenities</p>
+      </div>
+      <a href="/hotels.html" class="btn btn-secondary btn-sm">View All Hotels →</a>
+    </div>
+
+    <div class="hotels-grid" id="featuredHotels">
+      <!-- Will load 3 sample hotels -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="padding:0;">
+      <p>© 2026 TravelSphere Inc. Built strictly according to PRD & Technical Architecture Specifications.</p>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/chatbot.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await API.get('/hotels');
+        const container = document.getElementById('featuredHotels');
+        if (container && res.hotels) {
+          container.innerHTML = res.hotels.slice(0, 3).map(h => `
+            <div class="hotel-card">
+              <div class="hotel-img-wrapper">
+                <img class="hotel-img" src="${h.image_url}" alt="${h.name}" loading="lazy" />
+                <span class="hotel-badge-city">📍 ${h.city}</span>
+                <span class="hotel-rating-badge">★ ${h.rating}</span>
+              </div>
+              <div class="hotel-body">
+                <h3 class="hotel-name">${h.name}</h3>
+                <p class="hotel-address">📍 ${h.address}</p>
+                <div class="hotel-footer">
+                  <div class="hotel-price">
+                    <span class="price-val">₹${h.price_per_night.toLocaleString()}</span>
+                    <span class="price-sub">per night</span>
+                  </div>
+                  <a href="/hotel-detail.html?id=${h.id}" class="btn btn-primary btn-sm">Book Now →</a>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch(e) {}
+    });
+  </script>
+</body>
+</html>

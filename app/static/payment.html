@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Payment Checkout - TravelSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/chatbot.css">
+  <style>
+    .payment-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+    .payment-tab {
+      padding: 0.6rem 1.2rem;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: var(--transition-fast);
+    }
+    .payment-tab.active {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-blue);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="logo">
+        <div class="logo-icon">✈️</div>
+        <span>Travel<strong style="color:var(--accent-blue);">Sphere</strong></span>
+      </a>
+      <div class="nav-auth" id="navAuthContainer"></div>
+    </div>
+  </nav>
+
+  <main class="container" id="paymentContainer" style="max-width:960px;">
+    <!-- PAYMENT FORM VIEW -->
+    <div id="paymentFormSection">
+      <div style="text-align:center;margin-bottom:2.5rem;">
+        <span class="badge" style="background:rgba(59,130,246,0.15);color:var(--accent-cyan);border:1px solid rgba(59,130,246,0.3);margin-bottom:0.75rem;">
+          🔒 256-Bit SSL Encrypted Checkout
+        </span>
+        <h1 style="font-size:2.2rem;font-weight:700;">Complete Your Reservation</h1>
+        <p style="color:var(--text-secondary);font-size:0.92rem;">
+          Order Reference: <code id="orderReference" style="color:var(--accent-cyan);">Generating...</code>
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:2rem;align-items:start;">
+        <!-- Left: Payment Methods -->
+        <div class="card">
+          <div class="payment-tabs">
+            <button class="payment-tab active" data-method="card">💳 Card</button>
+            <button class="payment-tab" data-method="upi">📱 UPI / QR</button>
+            <button class="payment-tab" data-method="netbanking">🏦 Netbanking</button>
+          </div>
+
+          <!-- Card Form -->
+          <div id="cardForm">
+            <div class="form-group">
+              <label class="form-label">Card Number</label>
+              <input type="text" class="form-control" placeholder="4532 •••• •••• 8921" value="4532 8920 1234 5678">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="form-group">
+                <label class="form-label">Expiry MM/YY</label>
+                <input type="text" class="form-control" placeholder="12/28" value="12/28">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CVV / CVC</label>
+                <input type="password" class="form-control" placeholder="•••" value="888" maxlength="4">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cardholder Name</label>
+              <input type="text" class="form-control" placeholder="Name on Card" value="Soubhagya Traveler">
+            </div>
+          </div>
+
+          <!-- UPI Form -->
+          <div id="upiForm" style="display:none;">
+            <div class="form-group">
+              <label class="form-label">Virtual Payment Address (UPI ID)</label>
+              <input type="text" class="form-control" placeholder="username@okhdfcbank / username@upi" value="traveler@okhdfcbank">
+            </div>
+            <div style="display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap;">
+              <span class="amenity-pill" style="padding:0.4rem 0.8rem;">GPay</span>
+              <span class="amenity-pill" style="padding:0.4rem 0.8rem;">PhonePe</span>
+              <span class="amenity-pill" style="padding:0.4rem 0.8rem;">Paytm</span>
+              <span class="amenity-pill" style="padding:0.4rem 0.8rem;">BHIM</span>
+            </div>
+          </div>
+
+          <!-- Netbanking Form -->
+          <div id="netbankingForm" style="display:none;">
+            <div class="form-group">
+              <label class="form-label">Select Popular Bank</label>
+              <select class="form-control">
+                <option>HDFC Bank</option>
+                <option>State Bank of India</option>
+                <option>ICICI Bank</option>
+                <option>Axis Bank</option>
+                <option>Kotak Mahindra Bank</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:1.5rem;">
+            <button id="completePaymentBtn" class="btn btn-primary btn-block btn-lg">
+              Pay Now (<span id="payButtonAmount">₹0</span>) 🔒
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Order Summary Sidebar -->
+        <div class="card" style="background:rgba(15,23,42,0.85);">
+          <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1.25rem;">
+            <img id="summaryHotelImg" src="" style="width:70px;height:70px;border-radius:var(--radius-md);object-fit:cover;">
+            <div>
+              <h3 id="summaryHotelName" style="font-size:1.15rem;font-weight:700;color:#fff;">...</h3>
+              <p id="summaryHotelAddress" style="font-size:0.8rem;color:var(--text-secondary);">...</p>
+            </div>
+          </div>
+
+          <hr style="border:none;border-top:1px solid var(--border-color);margin:1rem 0;">
+
+          <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.88rem;">
+            <div style="display:flex;justify-content:space-between;color:var(--text-secondary);">
+              <span>Dates</span>
+              <strong id="summaryDates" style="color:#fff;">...</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;color:var(--text-secondary);">
+              <span>Rooms</span>
+              <strong id="summaryRooms" style="color:#fff;">1</strong>
+            </div>
+          </div>
+
+          <hr style="border:none;border-top:1px solid var(--border-color);margin:1rem 0;">
+
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:1.3rem;font-weight:800;color:#fff;">
+            <span>Total Payable</span>
+            <span id="summaryTotalAmount" style="color:var(--accent-cyan);">₹0</span>
+          </div>
+          <small style="color:var(--text-muted);font-size:0.75rem;margin-top:0.4rem;display:block;">
+            * Server-calculated, verified by backend HMAC security protocol.
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT RECEIPT / CONFIRMATION VIEW (Displayed after success) -->
+    <div id="paymentReceiptSection" style="display:none;">
+      <div class="card" style="max-width:650px;margin:0 auto;text-align:center;padding:2.5rem 2rem;">
+        <div style="width:65px;height:65px;background:rgba(16,185,129,0.2);border:2px solid #10b981;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.8rem;color:#10b981;">
+          ✓
+        </div>
+        <h2 style="font-size:2rem;font-weight:800;color:#fff;margin-bottom:0.4rem;">Booking Confirmed!</h2>
+        <p style="color:var(--text-secondary);margin-bottom:1.5rem;">
+          Your payment was verified successfully. A confirmation invoice has been generated.
+        </p>
+
+        <!-- Invoice Box -->
+        <div style="background:rgba(10,14,23,0.7);border:1px dashed var(--border-color);border-radius:var(--radius-md);padding:1.5rem;text-align:left;margin-bottom:2rem;font-size:0.9rem;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.75rem;">
+            <span style="color:var(--text-secondary);">Invoice Number:</span>
+            <strong id="receiptInvoiceNum" style="color:#fff;">--</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.75rem;">
+            <span style="color:var(--text-secondary);">Transaction Date:</span>
+            <span id="receiptPaymentDate" style="color:#fff;">--</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.75rem;">
+            <span style="color:var(--text-secondary);">Hotel:</span>
+            <strong id="receiptHotelName" style="color:#fff;">--</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.75rem;">
+            <span style="color:var(--text-secondary);">Location:</span>
+            <span id="receiptHotelAddress" style="color:#fff;">--</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.75rem;">
+            <span style="color:var(--text-secondary);">Guest:</span>
+            <span id="receiptGuestName" style="color:#fff;">--</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.75rem;">
+            <span style="color:var(--text-secondary);">Check-In / Out:</span>
+            <span style="color:#fff;"><span id="receiptCheckIn">--</span> to <span id="receiptCheckOut">--</span></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.75rem;">
+            <span style="color:var(--text-secondary);">Rooms:</span>
+            <span id="receiptRooms" style="color:#fff;">--</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.75rem;">
+            <span style="color:var(--text-secondary);">Payment ID:</span>
+            <code id="receiptPaymentId" style="color:var(--accent-cyan);">--</code>
+          </div>
+          <hr style="border:none;border-top:1px solid var(--border-color);margin:0.75rem 0;">
+          <div style="display:flex;justify-content:space-between;font-size:1.1rem;font-weight:700;">
+            <span>Amount Paid:</span>
+            <span id="receiptAmount" style="color:#10b981;">₹0</span>
+          </div>
+        </div>
+
+        <!-- Next Actions -->
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <button id="trackToHotelBtn" class="btn btn-primary btn-lg">
+            📍 Track Route to Booked Hotel on Map →
+          </button>
+          <div style="display:flex;gap:0.75rem;justify-content:center;">
+            <a href="/my-bookings.html" class="btn btn-secondary">View My Bookings</a>
+            <button onclick="window.print()" class="btn btn-secondary">🖨️ Print Invoice</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/payment.js"></script>
+  <script src="/js/chatbot.js"></script>
+</body>
+</html>

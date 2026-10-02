@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Operations Portal - TravelSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .admin-nav-tabs {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 1.5rem;
+    }
+    .admin-nav-tab {
+      padding: 0.75rem 1.25rem;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .admin-nav-tab.active {
+      color: #fff;
+      border-bottom-color: var(--accent-blue);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="logo">
+        <div class="logo-icon">✈️</div>
+        <span>Travel<strong style="color:var(--accent-blue);">Sphere</strong></span>
+      </a>
+
+      <button class="mobile-toggle-btn" id="mobileNavToggle" aria-label="Toggle Navigation">☰</button>
+
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="/index.html" class="nav-link">Home</a></li>
+          <li><a href="/dashboard.html" class="nav-link">Live Map & Tracker</a></li>
+          <li><a href="/hotels.html" class="nav-link">Explore Hotels</a></li>
+          <li><a href="/admin.html" class="nav-link active"><span class="badge badge-admin">Admin Dashboard</span></a></li>
+        </ul>
+
+        <div class="nav-auth" id="navAuthContainer"></div>
+      </div>
+    </div>
+  </nav>
+
+
+  <main class="container" id="adminContainer">
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+      <div>
+        <h1 style="font-size:2.2rem;font-weight:700;">Platform Administration</h1>
+        <p style="color:var(--text-secondary);">Manage hotel listings, customer bookings, and registered user accounts in real time.</p>
+      </div>
+      <div>
+        <button id="addNewUserBtn" class="btn btn-secondary" style="margin-right:0.5rem;">
+          👤 + Add User / Admin
+        </button>
+        <button id="addNewHotelBtn" class="btn btn-primary">
+          🏨 + Add New Hotel
+        </button>
+      </div>
+    </div>
+
+    <!-- Metrics Cards Grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:1.5rem;margin-bottom:2.5rem;">
+      <div class="card">
+        <div style="font-size:0.85rem;color:var(--text-secondary);text-transform:uppercase;margin-bottom:0.4rem;">Total Registered Users</div>
+        <div id="metricUsersCount" style="font-size:2rem;font-weight:800;color:#c084fc;">0</div>
+      </div>
+      <div class="card">
+        <div style="font-size:0.85rem;color:var(--text-secondary);text-transform:uppercase;margin-bottom:0.4rem;">Total Active Hotels</div>
+        <div id="metricHotelsCount" style="font-size:2rem;font-weight:800;color:#fff;">0</div>
+      </div>
+      <div class="card">
+        <div style="font-size:0.85rem;color:var(--text-secondary);text-transform:uppercase;margin-bottom:0.4rem;">Total Bookings</div>
+        <div id="metricBookingsCount" style="font-size:2rem;font-weight:800;color:var(--accent-blue);">0</div>
+      </div>
+      <div class="card">
+        <div style="font-size:0.85rem;color:var(--text-secondary);text-transform:uppercase;margin-bottom:0.4rem;">Platform Gross Revenue</div>
+        <div id="metricRevenue" style="font-size:2rem;font-weight:800;color:var(--accent-green);">₹0</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="admin-nav-tabs">
+      <button class="admin-nav-tab active" data-tab="hotels">🏨 Hotel Listings Management</button>
+      <button class="admin-nav-tab" data-tab="bookings">📋 Customer Bookings & Orders</button>
+      <button class="admin-nav-tab" data-tab="users">👥 User Accounts Management</button>
+    </div>
+
+    <!-- TAB 1: HOTELS MANAGEMENT -->
+    <section id="tabHotels">
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Hotel & City</th>
+                <th>Address</th>
+                <th>Price/Night</th>
+                <th>Total Rooms</th>
+                <th>Rating</th>
+                <th>Coordinates (Lat, Lng)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="hotelsTableBody">
+              <!-- Injected by admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: BOOKINGS SUPERVISION -->
+    <section id="tabBookings" style="display:none;">
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Guest</th>
+                <th>Hotel</th>
+                <th>Dates & Rooms</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody id="bookingsTableBody">
+              <!-- Injected by admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: USER ACCOUNTS MANAGEMENT -->
+    <section id="tabUsers" style="display:none;">
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>User ID & Name</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+                <th>System Role</th>
+                <th>Registered Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- Injected by admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL: ADD NEW USER / ADMIN -->
+  <div class="modal-overlay" id="userModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Create User or Admin Account</h3>
+        <button class="modal-close" id="closeUserModalBtn">&times;</button>
+      </div>
+      <form id="userForm">
+        <div class="modal-body" style="display:flex;flex-direction:column;gap:0.85rem;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="uName" class="form-control" required placeholder="e.g. Ramesh Kumar">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="uEmail" class="form-control" required placeholder="e.g. ramesh@travel.com">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Password</label>
+              <input type="password" id="uPassword" class="form-control" required placeholder="Min 6 characters">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Phone Number</label>
+              <input type="text" id="uPhone" class="form-control" placeholder="+91 9876543210">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Access Role</label>
+            <select id="uRole" class="form-control" required>
+              <option value="user">Standard User (Customer)</option>
+              <option value="admin">Administrator (Full Access)</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Create Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT HOTEL -->
+  <div class="modal-overlay" id="hotelModal">
+
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Add New Hotel</h3>
+        <button class="modal-close" id="closeHotelModalBtn">&times;</button>
+      </div>
+      <form id="hotelForm">
+        <input type="hidden" id="hotelId">
+        <div class="modal-body" style="display:flex;flex-direction:column;gap:0.85rem;max-height:70vh;overflow-y:auto;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Hotel Name</label>
+            <input type="text" id="hName" class="form-control" required placeholder="e.g. Royal Palace Hotel">
+          </div>
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:0.75rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Address</label>
+              <input type="text" id="hAddress" class="form-control" required placeholder="Street / Area">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">City</label>
+              <input type="text" id="hCity" class="form-control" required placeholder="City name">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Latitude</label>
+              <input type="number" step="0.0001" id="hLat" class="form-control" required placeholder="e.g. 18.9220">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Longitude</label>
+              <input type="number" step="0.0001" id="hLng" class="form-control" required placeholder="e.g. 72.8347">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Price / Night (₹)</label>
+              <input type="number" id="hPrice" class="form-control" required placeholder="e.g. 9500">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Total Rooms</label>
+              <input type="number" id="hRooms" class="form-control" required value="10">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Rating (1-5)</label>
+              <input type="number" step="0.1" max="5" id="hRating" class="form-control" value="4.8">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Image URL</label>
+            <input type="url" id="hImage" class="form-control" required placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Amenities (Comma separated)</label>
+            <input type="text" id="hAmenities" class="form-control" placeholder="Free WiFi, Pool, Spa, Dining" value="Free WiFi, Swimming Pool, Spa, Dining">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Description</label>
+            <textarea id="hDesc" class="form-control" rows="3" placeholder="Hotel description and key highlights"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Hotel Listing</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

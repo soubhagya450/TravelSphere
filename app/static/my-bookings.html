@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings & Travel Routes - TravelSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/chatbot.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="logo">
+        <div class="logo-icon">✈️</div>
+        <span>Travel<strong style="color:var(--accent-blue);">Sphere</strong></span>
+      </a>
+
+      <button class="mobile-toggle-btn" id="mobileNavToggle" aria-label="Toggle Navigation">☰</button>
+
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="/index.html" class="nav-link">Home</a></li>
+          <li><a href="/dashboard.html" class="nav-link">Live Map & Tracker</a></li>
+          <li><a href="/hotels.html" class="nav-link">Explore Hotels</a></li>
+        </ul>
+
+        <div class="nav-auth" id="navAuthContainer"></div>
+      </div>
+    </div>
+  </nav>
+
+
+  <main class="container">
+    <div style="margin-bottom:2rem;">
+      <h1 style="font-size:2.2rem;font-weight:700;">My Travel & Hotel Bookings</h1>
+      <p style="color:var(--text-secondary);">Manage your reserved stays, cancel bookings, or track your live route directly to your hotel.</p>
+    </div>
+
+    <div id="bookingsListContainer">
+      <!-- Injected via script below -->
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/chatbot.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const container = document.getElementById('bookingsListContainer');
+      if (!API.getToken()) {
+        window.location.href = '/login.html?redirect=/my-bookings.html';
+        return;
+      }
+
+      try {
+        const res = await API.get('/bookings/my');
+        const bookings = res.bookings || [];
+
+        if (bookings.length === 0) {
+          container.innerHTML = `
+            <div class="card" style="text-align:center;padding:4rem 1rem;">
+              <div style="font-size:3rem;margin-bottom:1rem;">🧳</div>
+              <h3>No bookings found</h3>
+              <p style="color:var(--text-secondary);margin:0.5rem 0 1.5rem;">
+                You haven't reserved any hotel stays yet. Start by exploring destinations.
+              </p>
+              <a href="/hotels.html" class="btn btn-primary">Find & Book Hotels →</a>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = `
+          <div style="display:flex;flex-direction:column;gap:1.5rem;">
+            ${bookings.map(b => renderBookingItem(b)).join('')}
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `<div class="card" style="color:var(--accent-rose);">Failed to load bookings: ${err.message}</div>`;
+      }
+    });
+
+    function renderBookingItem(b) {
+      const hotel = b.hotel || {};
+      let badgeClass = 'badge-pending';
+      if (b.status === 'confirmed') badgeClass = 'badge-confirmed';
+      if (b.status === 'cancelled') badgeClass = 'badge-cancelled';
+
+      const canTrack = b.status === 'confirmed';
+      const canCancel = b.status !== 'cancelled';
+      const isPending = b.status === 'pending';
+
+      return `
+        <div class="card" style="display:grid;grid-template-columns:180px 1fr auto;gap:1.5rem;align-items:center;">
+          <img src="${hotel.image_url || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80'}" style="width:100%;height:130px;object-fit:cover;border-radius:var(--radius-md);">
+          
+          <div>
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.4rem;">
+              <h3 style="font-size:1.3rem;font-weight:700;color:#fff;">${hotel.name || 'Hotel Stay'}</h3>
+              <span class="badge ${badgeClass}">${b.status}</span>
+            </div>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.6rem;">
+              📍 ${hotel.address || ''}, ${hotel.city || ''}
+            </p>
+            <div style="display:flex;gap:1.5rem;font-size:0.88rem;color:var(--text-secondary);">
+              <span>🗓️ <strong>${b.check_in}</strong> to <strong>${b.check_out}</strong> (${b.nights} nights)</span>
+              <span>🛏️ <strong>${b.rooms_booked}</strong> Room(s)</span>
+              <span>💰 <strong>₹${b.total_amount.toLocaleString()}</strong></span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:0.6rem;min-width:160px;">
+            ${isPending ? `
+              <a href="/payment.html?booking_id=${b.id}" class="btn btn-primary btn-sm">
+                💳 Complete Payment
+              </a>
+            ` : ''}
+            ${canTrack ? `
+              <button class="btn btn-success btn-sm" onclick="trackRouteToHotel(${hotel.lat}, ${hotel.lng}, '${hotel.name}')">
+                📍 Track Route
+              </button>
+            ` : ''}
+            ${canCancel ? `
+              <button class="btn btn-secondary btn-sm" onclick="handleCancelBooking(${b.id})">
+                Cancel Booking
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function trackRouteToHotel(lat, lng, name) {
+      const q = new URLSearchParams({
+        hotel_lat: lat,
+        hotel_lng: lng,
+        hotel_name: name
+      });
+      window.location.href = `/dashboard.html?${q.toString()}`;
+    }
+
+    async function handleCancelBooking(id) {
+      if (!confirm('Are you sure you want to cancel this booking? Held rooms will be released.')) return;
+      try {
+        await API.put(`/bookings/${id}/cancel`, {});
+        API.showToast('Booking cancelled successfully', 'info');
+        setTimeout(() => location.reload(), 600);
+      } catch (err) {
+        API.showToast(err.message, 'error');
+      }
+    }
+  </script>
+</body>
+</html>

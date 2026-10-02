@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Handpicked Luxury Hotels - TravelSphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/chatbot.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/index.html" class="logo">
+        <div class="logo-icon">✈️</div>
+        <span>Travel<strong style="color:var(--accent-blue);">Sphere</strong></span>
+      </a>
+
+      <button class="mobile-toggle-btn" id="mobileNavToggle" aria-label="Toggle Navigation">☰</button>
+
+      <div class="nav-menu" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="/index.html" class="nav-link">Home</a></li>
+          <li><a href="/dashboard.html" class="nav-link">Live Map & Tracker</a></li>
+          <li><a href="/hotels.html" class="nav-link active">Explore Hotels</a></li>
+        </ul>
+
+        <div class="nav-auth" id="navAuthContainer"></div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- Hotels Catalog -->
+  <main class="container">
+    <!-- Header -->
+    <div style="margin-bottom:2rem;">
+      <h1 style="font-size:2.4rem;font-weight:700;margin-bottom:0.4rem;">
+        Discover Premier <span class="gradient-text">Destination Hotels</span>
+      </h1>
+      <p style="color:var(--text-secondary);">
+        Choose your perfect stay. Once booked, your route will update directly to the hotel entrance.
+      </p>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="card" style="margin-bottom:2rem;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:1rem;align-items:end;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Search Hotel / Keyword</label>
+          <input type="text" id="filterSearch" class="form-control" placeholder="e.g. Palace, Resort, Hyatt...">
+        </div>
+
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Destination City</label>
+          <input type="text" id="filterCity" class="form-control" placeholder="e.g. Goa, Mumbai, Delhi...">
+        </div>
+
+        <div class="form-group" style="margin-bottom:0;">
+          <div style="display:flex;justify-content:space-between;">
+            <label class="form-label">Max Price / Night</label>
+            <span id="priceValDisplay" style="font-size:0.85rem;font-weight:700;color:var(--accent-blue);">₹25,000</span>
+          </div>
+          <input type="range" id="filterMaxPrice" min="3000" max="30000" step="500" value="25000" style="width:100%;accent-color:var(--accent-blue);">
+        </div>
+
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Min Rating</label>
+          <select id="filterRating" class="form-control">
+            <option value="">Any Rating</option>
+            <option value="4.8">★ 4.8 & above</option>
+            <option value="4.5">★ 4.5 & above</option>
+            <option value="4.0">★ 4.0 & above</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Key Amenity</label>
+          <select id="filterAmenity" class="form-control">
+            <option value="">All Amenities</option>
+            <option value="Pool">Swimming Pool</option>
+            <option value="Beachfront">Beachfront / Ocean View</option>
+            <option value="Spa">Spa & Wellness</option>
+            <option value="Dining">Fine Dining</option>
+          </select>
+        </div>
+
+        <div>
+          <button id="resetFiltersBtn" class="btn btn-secondary btn-block">
+            Reset Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <span id="resultsCount" style="font-size:0.95rem;color:var(--text-secondary);font-weight:600;">
+        Loading hotels...
+      </span>
+    </div>
+
+    <!-- Hotels Grid -->
+    <div class="hotels-grid" id="hotelsContainer">
+      <!-- Injected by hotels.js -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container" style="padding:0;">
+      <p>© 2026 TravelSphere Inc. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/hotels.js"></script>
+  <script src="/js/chatbot.js"></script>
+</body>
+</html>
